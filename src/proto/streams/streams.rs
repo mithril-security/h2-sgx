@@ -12,7 +12,15 @@ use std::task::{Context, Poll, Waker};
 use tokio::io::AsyncWrite;
 
 use crate::PollExt;
-use std::sync::{Arc, Mutex};
+
+use std::sync::Arc;
+
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
+
 use std::{fmt, io};
 
 #[derive(Debug)]
